@@ -24,8 +24,8 @@ rankhospital <- function(state, outcome, num = "best") {
                   "pneumonia"=23)
     # get subset base on specific state
     statedata <- subset(data, data[,7]==state)
-    # remove missing value
-    statedata <- na.omit(statedata)
+    # remove missing value in tcolumn of specific outcome
+    statedata<- statedata[!is.na(statedata[,col]),]
     # sort data base on column outcome.
     statedata <- statedata[order(statedata[,col], statedata[,2]),]
     
