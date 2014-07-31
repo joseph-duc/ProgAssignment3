@@ -16,13 +16,26 @@ rankhospital <- function(state, outcome, num = "best") {
     
     ## Return hospital name in that state with the given rank
     ## 30-day death rate
-    col <- switch(outcome,
-                  "heart attack"=11, "heart failure"=17, "pneumonia"=23)
     
+    # map outcome to column number in data
+    col <- switch(outcome,
+                  "heart attack"=11,
+                  "heart failure"=17,
+                  "pneumonia"=23)
+    # get subset base on specific state
     statedata <- subset(data, data[,7]==state)
-    #     statedata[, col] <- as.numeric(statedata[, col])
+    # remove missing value
     statedata <- na.omit(statedata)
-    min_val <- min(statedata[,col])
-    hospitals <- statedata[statedata[,col]==min_val,][,2]
+    # sort data base on column outcome.
+    statedata <- statedata[order(statedata[,col], statedata[,2]),]
+    
+    # return hospital name
+    if (num == "best") {
+        num <- 1
+    } else if (num == "worst") {
+        num <- nrow(statedata)
+    }
+    hospital <- statedata[num,2]
+    hospital
 
 }
